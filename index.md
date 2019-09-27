@@ -1,37 +1,75 @@
-## Welcome to GitHub Pages
+# Welcome to my GitHub Page
 
-You can use the [editor on GitHub](https://github.com/mlopezd/mlopezd.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+The purpose of this page is to share my notes and howtos that may be useful for other sysadmins.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+## Creating a MS-DOS boot disk USB for BIOS updates
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+I recently needed to create a DOS boot disk to update my HP ProLiant Microserver N54L bios, so I did what everyone does first, search on Google, but surprisingly, I was unable to find a guide that met all the requirements, which were the following:
 
+- The boot disk has to be **real MS-DOS**. For some reason, the provided HP's bios update tool was not compatible with FreeDOS, it crashed at every flash attempt.
+- The boot disk needs to be created under Ubuntu. I don't have any Windows workstation at home, so using Rufus as suggested by most guides, was not an option.
+- It has to run from a USB stick, as I don't have floppy or CD-ROM units in my HP ProLiant Microserver.
+
+After some trial and error, I was able to create a procedure that met the requirements and worked pretty good, so here it is:
+
+### Download a real MS-DOS boot disk image
+
+You can get the disk image from many places, but I recommend AllBootDisks: 
+[https://www.allbootdisks.com/download/dos.html](https://www.allbootdisks.com/download/dos.html). 
+
+There's many versions to choose, I guess any will do, but I chose the **Dos6.22.img** one.
+
+### Install QEMU
+
+QEMU is a really useful open source machine emulator, if you are using Ubuntu, just install it via apt:
 ```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+sudo apt-get install qemu
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Check that the DOS image is working by booting it using QEMU:
 
-### Jekyll Themes
+```markdown
+qemu-system-i386 -boot a -fda Dos6.22.img
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/mlopezd/mlopezd.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+It should open an emulator screen and boot into the classic MS-DOS prompt. You can close the window once you get the prompt, this step is just for checking QEMU and the DOS image work.
 
-### Support or Contact
+### Prepare the USB stick
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+The USB stick format doesn't really matter, as we will just write straight away to the block device. Just in case, I suggest using gparted to remove any partition on the USB stick, leave it partition-less and unformatted.
+
+
+### Install DOS boot files into the USB stick
+
+Now that we have all the necessary tools, it's time to put all of it together. 
+**IMPORTANT!** Be extra careful in the following step, we will write directly to a block device with root privileges, which means that you need to be sure you are pointing to the USB stick block device file, and not any other device like your hard drive which could cause data loss. Replace "/dev/sdX" with you USB stick device path, you can check which one is with 'lsblk' command:
+
+
+```markdown
+sudo qemu-system-i386 -boot a -fda Downloads/Dos6.22.img -fdb /dev/sdX
+```
+
+It should boot MS-DOS prompt. Now we have "A:" as the boot disk image, and "B:" as the USB stick.
+At DOS prompt, use DOS format executable with "/s" option to format and copy DOS boot files on the USB stick:
+
+```markdown
+A:\>format /s b:
+```
+
+You can close the prompt window now. I suggest to check that the USB stick boots in QEMU. Again, replace '/dev/sdX' with your USB stick device path.
+
+```markdown
+sudo qemu-system-i386 -boot a -fda /dev/sdX
+```
+
+It will probably ask for a new date and time, just hit enter twice to skip it. This will happen at every boot, if it annoys you too much, you can create a AUTOEXEC.BAT file with just the line "@ECHO OFF", that will stop it from asking a date and time at every boot.
+
+You can close the prompt window.
+
+
+### Copy your BIOS update tools
+
+Now we have a bootable DOS USB stick, with the minimum files to be able to boot. You can mount the USB stick in Ubuntu using your file manager and copy the update BIOS tools on it (Usually a ROM or BIN file, and a FLASH.EXE or similar executable, depends on each manufacturer).
+
+Your USB is ready now! Plug it in your workstation/server and remember to select to boot from USB during the boot process or in the BIOS settings.
