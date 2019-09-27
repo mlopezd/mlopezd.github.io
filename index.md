@@ -1,6 +1,6 @@
 # Welcome to my GitHub Page
 
-The purpose of this page is to share my notes and howtos that may be useful for other sysadmins.
+The purpose of this page is to share my notes and howtos that may be useful to other sysadmins.
 
 
 ## Creating a MS-DOS boot disk USB for BIOS updates
@@ -33,7 +33,7 @@ Check that the DOS image is working by booting it using QEMU:
 qemu-system-i386 -boot a -fda Dos6.22.img
 ```
 
-It should open an emulator screen and boot into the classic MS-DOS prompt. You can close the window once you get the prompt, this step is just for checking that QEMU and the DOS image work.
+It should open an emulator screen and boot into the classic MS-DOS prompt. You can close the window once you get the prompt, this step is just to check that QEMU and the DOS image work.
 
 ### Prepare the USB stick
 
@@ -66,13 +66,13 @@ You can close the prompt window now. I suggest to check that the USB stick boots
 sudo qemu-system-i386 -boot a -fda /dev/sdX
 ```
 
-It will probably ask for a new date and time, just hit enter twice to skip it. This will happen at every boot, if it annoys you too much, you can create a AUTOEXEC.BAT file with just the line "@ECHO OFF", that will stop it from asking a date and time at every boot.
+It will probably ask for a new date and time, just hit enter twice to skip it. This will happen at every boot, if it annoys you too much, you can prevent it creating an AUTOEXEC.BAT file with just the line "@ECHO OFF" on it.
 
 You can close the prompt window.
 
 
 ### Copy your BIOS update tools
 
-Now we have a bootable DOS USB stick, with the minimum files to be able to boot. You can mount the USB stick in Ubuntu using your file manager and copy the update BIOS tools on it (Usually a ROM or BIN file, and a FLASH.EXE or similar executable, depends on each manufacturer).
+Now we have a bootable DOS USB stick, with the minimum files to be able to boot. You can remount the USB stick in Ubuntu using your file manager and copy the manufaturer's provided update BIOS tools on it (Usually a ROM or BIN file, and a FLASH.EXE or similar executable).
 
-Your USB is ready now! Plug it in your workstation/server and remember to select to boot from USB during the boot process or in the BIOS settings.
+Your USB is ready now! Plug it in your workstation/server and remember to select to boot from USB during the boot process or in the BIOS settings ;)
