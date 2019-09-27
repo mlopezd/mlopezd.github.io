@@ -33,7 +33,7 @@ Check that the DOS image is working by booting it using QEMU:
 qemu-system-i386 -boot a -fda Dos6.22.img
 ```
 
-It should open an emulator screen and boot into the classic MS-DOS prompt. You can close the window once you get the prompt, this step is just for checking QEMU and the DOS image work.
+It should open an emulator screen and boot into the classic MS-DOS prompt. You can close the window once you get the prompt, this step is just for checking that QEMU and the DOS image work.
 
 ### Prepare the USB stick
 
@@ -42,8 +42,11 @@ The USB stick format doesn't really matter, as we will just write straight away 
 
 ### Install DOS boot files into the USB stick
 
-Now that we have all the necessary tools, it's time to put all of it together. 
-**IMPORTANT!** Be extra careful in the following step, we will write directly to a block device with root privileges, which means that you need to be sure you are pointing to the USB stick block device file, and not any other device like your hard drive which could cause data loss. Replace "/dev/sdX" with you USB stick device path, you can check which one is with 'lsblk' command:
+Now that we have all the necessary tools, it's time to put all of it together.
+
+**IMPORTANT!** Be extra careful in the following step, we will write directly to a block device with root privileges, which means that you need to be sure you are pointing to the USB stick block device file, and not any other device like your hard drive which could cause data loss. Replace "/dev/sdX" with you USB stick device path, you can check which one is with 'lsblk' command.
+
+Run QEMU with both DOS image and USB as emulated floppy devices:
 
 
 ```markdown
