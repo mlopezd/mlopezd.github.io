@@ -73,6 +73,6 @@ You can close the prompt window.
 
 ### Copy your BIOS update tools
 
-Now we have a bootable DOS USB stick, with the minimum files to be able to boot. You can remount the USB stick in Ubuntu using your file manager and copy the manufaturer's provided update BIOS tools on it (Usually a ROM or BIN file, and a FLASH.EXE or similar executable).
+Now we have a bootable DOS USB stick, with the minimum files to be able to boot. You can remount the USB stick in Ubuntu using your file manager and copy the manufacturer's provided update BIOS tools on it (Usually a ROM or BIN file, and a FLASH.EXE or similar executable).
 
-Your USB is ready now! Plug it in your workstation/server and remember to select to boot from USB during the boot process or in the BIOS settings ;)
+Your USB is ready now! Plug it in your workstation/server and remember to select to boot from USB during the boot process, or change the boot order in the BIOS settings ;)
